@@ -1,4 +1,3 @@
-// src/components/EntryForm.js
 import React, { useState } from 'react';
 import { registerEntry } from '../services/api';
 import { Button, Form } from 'react-bootstrap';

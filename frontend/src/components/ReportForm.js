@@ -1,7 +1,11 @@
-// src/components/ReportForm.js
 import React, { useState } from 'react';
 import { getReport } from '../services/api';
 import { Button, Form } from 'react-bootstrap';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+import 'jspdf-autotable';
 
 const ReportForm = () => {
   const [from, setFrom] = useState('');
@@ -13,6 +17,67 @@ const ReportForm = () => {
     const response = await getReport(from, to);
     setReport(response);
   };
+
+  const handleDownloadExcel = () => {
+    if (report.length === 0) {
+      alert('No hay datos para generar el archivo Excel');
+      return;
+    }
+
+    const wb = XLSX.utils.book_new();
+
+    const ws = XLSX.utils.json_to_sheet(
+      report.map((entry) => ({
+        'Placa': entry.license_plate,
+        'Hora de Entrada': entry.entry_time,
+        'Hora de Salida': entry.exit_time,
+        'Tiempo Estacionado (min)': entry.total_time_minutes,
+        'Tipo': entry.vehicle_type,
+        'Cantidad a Pagar ($)': entry.total_amount,
+      }))
+    );
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Reporte Estacionamiento');
+    XLSX.writeFile(wb, 'reporte_estacionamiento.xlsx');
+  };
+
+  const handleDownloadPDF = () => {
+    if (report.length === 0) {
+      alert('No hay datos para generar el PDF');
+      return;
+    }
+  
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text('Reporte de Estacionamiento', 14, 20);
+  
+    const tableColumn = [
+      'Placa',
+      'Entrada',
+      'Salida',
+      'Tiempo (min)',
+      'Tipo',
+      'Total ($)',
+    ];
+  
+    const tableRows = report.map((entry) => [
+      entry.license_plate,
+      entry.entry_time,
+      entry.exit_time,
+      entry.total_time_minutes,
+      entry.vehicle_type,
+      entry.total_amount,
+    ]);
+  
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+  
+    doc.save('reporte_estacionamiento.pdf');
+  };
+  
 
   return (
     <div className="container mt-5">
@@ -46,6 +111,8 @@ const ReportForm = () => {
             <thead>
               <tr>
                 <th>Placa</th>
+                <th>Hora de Entrada</th>
+                <th>Hora de Salida</th>
                 <th>Tiempo Estacionado</th>
                 <th>Tipo</th>
                 <th>Cantidad a Pagar</th>
@@ -55,6 +122,8 @@ const ReportForm = () => {
               {report.map((entry, index) => (
                 <tr key={index}>
                   <td>{entry.license_plate}</td>
+                  <td>{entry.entry_time}</td>
+                  <td>{entry.exit_time}</td>
                   <td>{entry.total_time_minutes} minutos</td>
                   <td>{entry.vehicle_type}</td>
                   <td>${entry.total_amount}</td>
@@ -62,6 +131,13 @@ const ReportForm = () => {
               ))}
             </tbody>
           </table>
+
+          <Button onClick={handleDownloadExcel} className="mt-3 me-2">
+            Descargar Excel
+          </Button>
+          <Button onClick={handleDownloadPDF} className="mt-3">
+            Descargar PDF
+          </Button>
         </div>
       )}
     </div>

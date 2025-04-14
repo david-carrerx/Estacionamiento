@@ -1,4 +1,3 @@
-// src/components/ExitForm.js
 import React, { useState } from 'react';
 import { registerExit } from '../services/api';
 import { Button, Form } from 'react-bootstrap';

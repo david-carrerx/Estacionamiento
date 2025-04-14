@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import EntryForm from './components/EntryForm';
 import ExitForm from './components/ExitForm';
