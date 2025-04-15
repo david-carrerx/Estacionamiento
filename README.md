@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS parking_records (
 
 ```bash
 #Ahora para correr el backend usa el siguiente comando, en caso de tener el puerto ocupado puedes cambiarlo en el archivo .env
-npm run dev
+node server.js
 ```
 
 Esto iniciará el backend en `http://localhost:3000`.
@@ -96,7 +96,7 @@ const API_URL = 'http://localhost:3000';
 npm start
 ```
 
-Esto abrirá la aplicación en tu navegador en `http://localhost:3000`.
+Esto abrirá la aplicación en el navegador en `http://localhost:3001`.
 
 ---
 
@@ -115,18 +115,28 @@ Esto abrirá la aplicación en tu navegador en `http://localhost:3000`.
 
 ---
 
-## 📂 Estructura del proyecto
+## Estructura del proyecto
 
 ```
 /backend
-  └── index.js, routes, controllers, database.js
+  └── config/db.js
+  └── controllers/parkingController.js
+  └── models/parkingModel.js
+  └── routes/parking-routes.js
+  .env (Lo agregas)
+  packing.sql
+  server.js
+
 /frontend
   └── src/components/ReportForm.js
+  └── src/components/EntryForm.js
+  └── src/components/ExitForm.js
   └── src/services/api.js
+  App.js
+  index.js
 ```
 
 ---
 
-## 🧑‍💻 Autor
-
+## Autor
 Ángel David Lerma Carrera
