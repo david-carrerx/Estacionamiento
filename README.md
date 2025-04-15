@@ -14,7 +14,7 @@ Este proyecto de aplicación web permite registrar y consultar los horarios y pr
 
 ```bash
 # Primero debes clonar el repositorio
-git clone <https://github.com/david-carrerx/Estacionamiento.git>
+git clone https://github.com/david-carrerx/Estacionamiento.git
 
 # Luego navegar a la carpeta del Backend
 cd backend
